@@ -1,7 +1,7 @@
 function editNav() {
     var x = document.getElementById("myTopnav");
     if (x.className === "topnav") {
-        x.className += " responsive";
+        x.className += "responsive";
     } else {
         x.className = "topnav";
     }
@@ -21,7 +21,7 @@ closeBtn.addEventListener("click", closeModal);
 
 // attach validate function to form submit
 document.forms["reserve"].onsubmit = function (event) {
-    event.preventDefault(); // prevent form submission
+    event.preventDefault(); // prevent form submission to avoid page reload
     if (validate()) {
         showSuccessMessage();
     }
