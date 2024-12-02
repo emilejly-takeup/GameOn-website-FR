@@ -42,7 +42,7 @@ function showSuccessMessage() {
     const modalBody = document.querySelector(".modal-body");
     modalBody.innerHTML = `
         <div style="text-align: center; padding: 20px;">
-            <p style="font-size: 24px; margin: 30px 0;">Merci pour votre inscription</p>
+            <p style="font-size: 24px; margin: 330px 0;">Merci pour votre inscription</p>
             <button class="btn-submit" onclick="closeModal()">Fermer</button>
         </div>
     `;
