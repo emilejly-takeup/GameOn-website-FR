@@ -60,6 +60,7 @@ function validate() {
         isValid = false;
     } else {
         firstName.parentElement.setAttribute("data-error-visible", "false");
+        console.log("First Name:", firstName.value);
     }
 
     // validate last name
@@ -70,6 +71,7 @@ function validate() {
         isValid = false;
     } else {
         lastName.parentElement.setAttribute("data-error-visible", "false");
+        console.log("Last Name:", lastName.value);
     }
 
     // validate email
@@ -81,44 +83,7 @@ function validate() {
         isValid = false;
     } else {
         email.parentElement.setAttribute("data-error-visible", "false");
-    }
-
-    // validate quantity
-    const quantity = document.getElementById("quantity");
-    if (isNaN(quantity.value) || quantity.value.trim() === "") {
-        quantity.parentElement.setAttribute("data-error-visible", "true");
-        quantity.parentElement.setAttribute("data-error", "Veuillez entrer un nombre.");
-        isValid = false;
-    } else {
-        quantity.parentElement.setAttribute("data-error-visible", "false");
-    }
-
-    // validate radio buttons
-    const locationRadios = document.querySelectorAll('input[name="location"]');
-    let locationSelected = false;
-    locationRadios.forEach((radio) => {
-        if (radio.checked) {
-            locationSelected = true;
-        }
-    });
-    const radioGroup = document.querySelector(".radio-group");
-    // if no location is selected, show error
-    if (!locationSelected) {
-        radioGroup.setAttribute("data-error-visible", "true");
-        radioGroup.setAttribute("data-error", "Veuillez sélectionner un tournoi.");
-        isValid = false;
-    } else {
-        radioGroup.setAttribute("data-error-visible", "false");
-    }
-
-    // validate terms and conditions checkbox
-    const termsCheckbox = document.getElementById("checkbox1");
-    if (!termsCheckbox.checked) {
-        termsCheckbox.parentElement.setAttribute("data-error-visible", "true");
-        termsCheckbox.parentElement.setAttribute("data-error", "Vous devez accepter les conditions.");
-        isValid = false;
-    } else {
-        termsCheckbox.parentElement.setAttribute("data-error-visible", "false");
+        console.log("Email:", email.value);
     }
 
     // validate birthdate
@@ -130,16 +95,61 @@ function validate() {
     } else {
         const today = new Date();
         const birthdateValue = new Date(birthdate.value);
-
-        // ensures the birthdate is not later than today
         if (birthdateValue > today) {
             birthdate.parentElement.setAttribute("data-error-visible", "true");
             birthdate.parentElement.setAttribute("data-error", "La date de naissance ne peut pas être dans le futur.");
             isValid = false;
         } else {
             birthdate.parentElement.setAttribute("data-error-visible", "false");
+            console.log("Birthdate:", birthdate.value);
         }
     }
+
+    // validate quantity
+    const quantity = document.getElementById("quantity");
+    if (isNaN(quantity.value) || quantity.value.trim() === "") {
+        quantity.parentElement.setAttribute("data-error-visible", "true");
+        quantity.parentElement.setAttribute("data-error", "Veuillez entrer un nombre.");
+        isValid = false;
+    } else {
+        quantity.parentElement.setAttribute("data-error-visible", "false");
+        console.log("Quantity:", quantity.value);
+    }
+
+    // validate radio buttons
+    const locationRadios = document.querySelectorAll('input[name="location"]');
+    let locationSelected = false;
+    let selectedLocation = "";
+    locationRadios.forEach((radio) => {
+        if (radio.checked) {
+            locationSelected = true;
+            selectedLocation = radio.value;
+        }
+    });
+    const radioGroup = document.querySelector(".radio-group");
+    if (!locationSelected) {
+        radioGroup.setAttribute("data-error-visible", "true");
+        radioGroup.setAttribute("data-error", "Veuillez sélectionner un tournoi.");
+        isValid = false;
+    } else {
+        radioGroup.setAttribute("data-error-visible", "false");
+        console.log("Selected Location:", selectedLocation);
+    }
+
+    // validate terms and conditions checkbox
+    const termsCheckbox = document.getElementById("checkbox1");
+    if (!termsCheckbox.checked) {
+        termsCheckbox.parentElement.setAttribute("data-error-visible", "true");
+        termsCheckbox.parentElement.setAttribute("data-error", "Vous devez accepter les conditions.");
+        isValid = false;
+    } else {
+        termsCheckbox.parentElement.setAttribute("data-error-visible", "false");
+        console.log("Terms Accepted:", termsCheckbox.checked);
+    }
+
+    // Add newsletter subscription status
+    const newsletterCheckbox = document.getElementById("checkbox2");
+    console.log("Newsletter Subscription:", newsletterCheckbox.checked);
 
     return isValid;
 }
