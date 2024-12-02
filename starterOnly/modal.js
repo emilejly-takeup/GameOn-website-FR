@@ -21,8 +21,9 @@ closeBtn.addEventListener("click", closeModal);
 
 // attach validate function to form submit
 document.forms["reserve"].onsubmit = function (event) {
-    if (!validate()) {
-        event.preventDefault(); // prevent form submission if validation fails
+    event.preventDefault(); // prevent form submission
+    if (validate()) {
+        showSuccessMessage();
     }
 };
 
@@ -34,6 +35,17 @@ function launchModal() {
 // close modal form
 function closeModal() {
     modalbg.style.display = "none";
+}
+
+// show success message
+function showSuccessMessage() {
+    const modalBody = document.querySelector(".modal-body");
+    modalBody.innerHTML = `
+        <div style="text-align: center; padding: 20px;">
+            <p style="font-size: 24px; margin: 30px 0;">Merci pour votre inscription</p>
+            <button class="btn-submit" onclick="closeModal()">Fermer</button>
+        </div>
+    `;
 }
 
 // validate form
@@ -107,6 +119,26 @@ function validate() {
         isValid = false;
     } else {
         termsCheckbox.parentElement.setAttribute("data-error-visible", "false");
+    }
+
+    // validate birthdate
+    const birthdate = document.getElementById("birthdate");
+    if (!birthdate.value) {
+        birthdate.parentElement.setAttribute("data-error-visible", "true");
+        birthdate.parentElement.setAttribute("data-error", "Veuillez entrer votre date de naissance.");
+        isValid = false;
+    } else {
+        const today = new Date();
+        const birthdateValue = new Date(birthdate.value);
+
+        // ensures the birthdate is not later than today
+        if (birthdateValue > today) {
+            birthdate.parentElement.setAttribute("data-error-visible", "true");
+            birthdate.parentElement.setAttribute("data-error", "La date de naissance ne peut pas être dans le futur.");
+            isValid = false;
+        } else {
+            birthdate.parentElement.setAttribute("data-error-visible", "false");
+        }
     }
 
     return isValid;
