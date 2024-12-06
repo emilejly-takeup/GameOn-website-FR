@@ -19,13 +19,17 @@ modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 // close modal event
 closeBtn.addEventListener("click", closeModal);
 
-// attach validate function to form submit
-document.forms["reserve"].onsubmit = function (event) {
-    event.preventDefault(); // prevent form submission to avoid page reload
-    if (validate()) {
-        showSuccessMessage();
-    }
-};
+// onsubmit
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.forms["reserve"];
+    form.removeAttribute("onsubmit");
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        if (validate()) {
+            showSuccessMessage();
+        }
+    });
+});
 
 // launch modal form
 function launchModal() {
@@ -116,16 +120,11 @@ function validate() {
         console.log("Quantity:", quantity.value);
     }
 
-    // validate radio buttons
+    // refactored location validation
     const locationRadios = document.querySelectorAll('input[name="location"]');
-    let locationSelected = false;
-    let selectedLocation = "";
-    locationRadios.forEach((radio) => {
-        if (radio.checked) {
-            locationSelected = true;
-            selectedLocation = radio.value;
-        }
-    });
+    const locationSelected = Array.from(locationRadios).some((radio) => radio.checked);
+    const selectedLocation = locationSelected ? Array.from(locationRadios).find((radio) => radio.checked).value : "";
+
     const radioGroup = document.querySelector(".radio-group");
     if (!locationSelected) {
         radioGroup.setAttribute("data-error-visible", "true");
@@ -153,3 +152,16 @@ function validate() {
 
     return isValid;
 }
+
+// reusable validator functions
+const validators = {
+    validateName: (value, minLength = 2) => value.trim().length >= minLength,
+    validateEmail: (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
+    validateBirthdate: (date) => {
+        if (!date) return false;
+        const birthdateValue = new Date(date);
+        return birthdateValue < new Date();
+    },
+    validateQuantity: (value) => !isNaN(value) && value.trim() !== "",
+    validateCheckbox: (checked) => checked,
+};
