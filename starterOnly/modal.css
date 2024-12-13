@@ -70,6 +70,9 @@ img {
 @media screen and (max-width: 1000px) {
     .topnav a {
         display: none;
+        font-size: 16px;
+        padding: 8px 8px;
+        margin: 3px;
     }
     .topnav a.icon {
         float: right;
@@ -85,9 +88,11 @@ img {
         top: 0;
     }
     .topnav.responsive a {
-        float: none;
-        display: block;
-        text-align: left;
+        display: inline-block;
+        text-align: center;
+    }
+    .main-navbar {
+        margin-right: 24px;
     }
 }
 

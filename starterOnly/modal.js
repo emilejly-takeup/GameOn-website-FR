@@ -1,28 +1,29 @@
+const navMenuIcon = document.getElementById("nav-menu-icon");
+navMenuIcon.addEventListener("click", editNav);
 function editNav() {
     var x = document.getElementById("myTopnav");
     if (x.className === "topnav") {
-        x.className += "responsive";
+        x.className += " responsive";
     } else {
         x.className = "topnav";
     }
 }
 
+// TODO 1 : fermer la modale
+const closeBtn = document.querySelector(".close");
+closeBtn.addEventListener("click", closeModal);
+
 // DOM Elements
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
-const closeBtn = document.querySelector(".close");
 
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 
-// close modal event
-closeBtn.addEventListener("click", closeModal);
-
 // onsubmit
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.forms["reserve"];
-    form.removeAttribute("onsubmit");
     form.addEventListener("submit", function (event) {
         event.preventDefault();
         if (validate()) {
@@ -41,6 +42,8 @@ function closeModal() {
     modalbg.style.display = "none";
 }
 
+// TODO 4 : Message de succès qui remplace le form dans la modale
+// et est trigger quand validate() retourne true
 // show success message
 function showSuccessMessage() {
     const modalBody = document.querySelector(".modal-body");
@@ -52,13 +55,16 @@ function showSuccessMessage() {
     `;
 }
 
+// TODO 2 : Implémenter entrées du formulaire
+// TODO 3 : Insertion des messages d'erreur + rendu visible
+// TODO 5 : Ajout des console.log pour les tests
 // validate form
 function validate() {
     let isValid = true;
 
     // validate first name
     const firstName = document.getElementById("first");
-    if (firstName.value.trim().length < 2) {
+    if (!validators.validateName(firstName.value)) {
         firstName.parentElement.setAttribute("data-error-visible", "true");
         firstName.parentElement.setAttribute("data-error", "Prénom doit avoir au moins 2 caractères.");
         isValid = false;
@@ -69,7 +75,7 @@ function validate() {
 
     // validate last name
     const lastName = document.getElementById("last");
-    if (lastName.value.trim().length < 2) {
+    if (!validators.validateName(lastName.value)) {
         lastName.parentElement.setAttribute("data-error-visible", "true");
         lastName.parentElement.setAttribute("data-error", "Nom doit avoir au moins 2 caractères.");
         isValid = false;
@@ -80,8 +86,7 @@ function validate() {
 
     // validate email
     const email = document.getElementById("email");
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(email.value)) {
+    if (!validators.validateEmail(email.value)) {
         email.parentElement.setAttribute("data-error-visible", "true");
         email.parentElement.setAttribute("data-error", "E-mail invalide.");
         isValid = false;
@@ -92,26 +97,18 @@ function validate() {
 
     // validate birthdate
     const birthdate = document.getElementById("birthdate");
-    if (!birthdate.value) {
+    if (!validators.validateBirthdate(birthdate.value)) {
         birthdate.parentElement.setAttribute("data-error-visible", "true");
         birthdate.parentElement.setAttribute("data-error", "Veuillez entrer votre date de naissance.");
         isValid = false;
     } else {
-        const today = new Date();
-        const birthdateValue = new Date(birthdate.value);
-        if (birthdateValue > today) {
-            birthdate.parentElement.setAttribute("data-error-visible", "true");
-            birthdate.parentElement.setAttribute("data-error", "La date de naissance ne peut pas être dans le futur.");
-            isValid = false;
-        } else {
-            birthdate.parentElement.setAttribute("data-error-visible", "false");
-            console.log("Birthdate:", birthdate.value);
-        }
+        birthdate.parentElement.setAttribute("data-error-visible", "false");
+        console.log("Birthdate:", birthdate.value);
     }
 
     // validate quantity
     const quantity = document.getElementById("quantity");
-    if (isNaN(quantity.value) || quantity.value.trim() === "") {
+    if (!validators.validateQuantity(quantity.value)) {
         quantity.parentElement.setAttribute("data-error-visible", "true");
         quantity.parentElement.setAttribute("data-error", "Veuillez entrer un nombre.");
         isValid = false;
@@ -137,7 +134,7 @@ function validate() {
 
     // validate terms and conditions checkbox
     const termsCheckbox = document.getElementById("checkbox1");
-    if (!termsCheckbox.checked) {
+    if (!validators.validateCheckbox(termsCheckbox.checked)) {
         termsCheckbox.parentElement.setAttribute("data-error-visible", "true");
         termsCheckbox.parentElement.setAttribute("data-error", "Vous devez accepter les conditions.");
         isValid = false;
@@ -155,7 +152,7 @@ function validate() {
 
 // reusable validator functions
 const validators = {
-    validateName: (value, minLength = 2) => value.trim().length >= minLength,
+    validateName: (value) => value.trim().length >= 2,
     validateEmail: (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
     validateBirthdate: (date) => {
         if (!date) return false;
