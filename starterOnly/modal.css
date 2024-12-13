@@ -68,31 +68,32 @@ img {
 }
 
 @media screen and (max-width: 1000px) {
-    .topnav a {
+    .topnav a:not(.icon) {
         display: none;
-        font-size: 16px;
-        padding: 8px 8px;
-        margin: 3px;
     }
     .topnav a.icon {
-        float: right;
         display: block;
-        color: red;
+        color: #ff0000;
+        position: fixed;
+        right: 35px;
+        top: 20px;
+    }
+    .topnav a.icon:hover,
+    .topnav a.icon.active {
+        background-color: transparent;
+        color: #ff0000;
+        border-radius: 0;
     }
     .topnav.responsive {
         position: relative;
     }
-    .topnav.responsive .icon {
-        position: absolute;
-        right: 0;
-        top: 0;
-    }
     .topnav.responsive a {
-        display: inline-block;
-        text-align: center;
+        float: none;
+        display: block;
+        text-align: left;
     }
     .main-navbar {
-        margin-right: 24px;
+        margin-top: 50px;
     }
 }
 

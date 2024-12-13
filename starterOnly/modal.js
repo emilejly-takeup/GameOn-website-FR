@@ -40,6 +40,7 @@ function launchModal() {
 // close modal form
 function closeModal() {
     modalbg.style.display = "none";
+    window.location.reload();
 }
 
 // TODO 4 : Message de succès qui remplace le form dans la modale
